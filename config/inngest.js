@@ -8,7 +8,7 @@ export const inngest = new Inngest({ id: "stikflo-next" })
 // inngest function to create user
 export const syncUserCreate = inngest.createFunction(
     {
-        id: 'sync-user-from-clerk',
+        id: 'sync-user-create-from-clerk',
     }, {
         event: 'clerk/user.created'
     },
@@ -22,9 +22,9 @@ export const syncUserCreate = inngest.createFunction(
         if (!user) {
             await User.create({
                 _id: id,
-                name: `${first_name} ${last_name}`,
                 email: email_addresses[0].email_address,
-                image: image_url
+                name: `${first_name} ${last_name}`,
+                imageUrl: image_url
             });
         }
     }
@@ -41,10 +41,11 @@ export const syncyUserUpdate = inngest.createFunction(
         const { id, first_name, last_name, email_addresses, image_url } = event.data
         
         await dbConnect()
+
         await User.findByIdAndUpdate(id, {
-            name: `${first_name} ${last_name}`,
             email: email_addresses[0].email_address,
-            image: image_url
+            name: `${first_name} ${last_name}`,
+            imageUrl: image_url
         });
     }
 )
@@ -60,6 +61,7 @@ export const syncyUserDelete = inngest.createFunction(
         const { id } = event.data
         
         await dbConnect()
+
         await User.findByIdAndDelete(id);
     }
 )
