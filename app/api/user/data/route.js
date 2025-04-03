@@ -9,6 +9,7 @@ export async function GET(request) {
         const { userId } = getAuth(request)
 
         await dbConnect()
+        
         const user = await User.findById(userId)
 
         if(!user) {

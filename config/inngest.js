@@ -14,19 +14,14 @@ export const syncUserCreate = inngest.createFunction(
     },
     async (event) => {
         const { id, first_name, last_name, email_addresses, image_url } = event.data
-        
-        await dbConnect()
-
-        const user = await User.findOne({ id })
-
-        if (!user) {
-            await User.create({
-                _id: id,
-                email: email_addresses[0].email_address,
-                name: `${first_name} ${last_name}`,
-                imageUrl: image_url
-            });
+        const userData = {
+            _id: id,
+            email: email_addresses[0].email_address,
+            name: `${first_name} ${last_name}`,
+            imageUrl: image_url
         }
+        await dbConnect()
+        await User.create(userData);
     }
 )
 
